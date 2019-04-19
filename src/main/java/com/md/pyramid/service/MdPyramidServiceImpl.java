@@ -33,7 +33,9 @@ public class MdPyramidServiceImpl implements MdPyramidService {
         int[][] result = new int[size + ONE][size + ONE];
         boolean isEvenNumber = isEvenNumber(leftTriangleArray[ZERO][ZERO]);
         isEvenNumber = isEvenNumber(size + ONE) ? Boolean.TRUE : isEvenNumber;
+        // looping from bottom to up
         for (int row = size - ONE; row >= ZERO; row--) {
+            // calculating size -1 row max sum and updating to result array
             isEvenNumber = updateColumnWiseSum(leftTriangleArray, result, isEvenNumber, row);
         }
         return result[ZERO][ZERO] + leftTriangleArray[ZERO][ZERO];
@@ -54,9 +56,13 @@ public class MdPyramidServiceImpl implements MdPyramidService {
      */
     private boolean updateColumnWiseSum(final int[][] leftTriangleArray, final int[][] result, final boolean isEvenNumber, final int row) {
         for (int column = ZERO; column <= row; column++) {
+            // finding the left child number from the current
             int leftChild = (isEvenNumber(leftTriangleArray[row + ONE][column]) == isEvenNumber ? leftTriangleArray[row + ONE][column] : ZERO);
+            // finding the right child number from the current
             int rightChild = (isEvenNumber(leftTriangleArray[row + ONE][column + ONE]) == isEvenNumber ? leftTriangleArray[row + ONE][column + ONE] : ZERO);
+            // if both numbers are even or odd then taking the max number
             int validNodeNumber = getValidNodeNumber(leftChild, rightChild, isEvenNumber);
+            // updating the max number in result array
             result[row][column] = validNodeNumber + (leftChild == validNodeNumber ? result[row + ONE][column] : result[row + ONE][column + ONE]);
         }
         return isEvenNumber ? Boolean.FALSE : Boolean.TRUE;

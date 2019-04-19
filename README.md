@@ -34,5 +34,79 @@ Java 1.8
 Maven 3.X
 Junit 4.x
 
+##Approach used to solve this problem
+
+Used dynamic programming approach to find max sum from the given Pyramid
+
+
+###Step 1: Converting given Pyramid to array:
+
+After Conversion from pyramid to array:
+
+[1,0,0,0]
+
+[8,9,0,0]
+
+[1,5,9,0]
+
+[4,5,2,3]
+
+
+Result Array: 
+
+[0,0,0,0]
+
+[0,0,0,0]
+
+[0,0,0,0]
+
+[0,0,0,0]
+
+
+
+###Step 2: Iterating array from row-1 to 0 here initially row = 3
+
+After completion 1st iteration Result Array: 
+
+[0,0,0,0]
+
+[0,0,0,0]
+
+[4,2,2,0]
+
+[0,0,0,0]
+
+###Step 3: Iterating array from row-1 to 0 here row=2
+
+After completion 2nd iteration Result Array: 
+
+[0,0,0,0]
+
+[7,11,0,0]
+
+[4,2,2,0]
+
+[0,0,0,0]
+
+###Step 4: Iterating array from row-1 to 0 here row=1
+
+After completion 3nd iteration Result Array: 
+
+[15,0,0,0]
+
+[7,11,0,0]
+
+[4,2,2,0]
+
+[0,0,0,0]
+
+
+###Step 5: Taking the final sum from result array [0,0] element + leftTriangleArray[0,0]
+
+Final result 16 = 15 + 1
+
+
+
+
 
  
