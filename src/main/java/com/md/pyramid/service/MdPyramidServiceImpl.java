@@ -23,7 +23,7 @@ public class MdPyramidServiceImpl implements MdPyramidService {
     }
 
     /**
-     * This method will calculate the max sum for given array
+     * This method will calculate the max sum form given array
      * 
      * @param leftTriangleArray
      * @return max sum
