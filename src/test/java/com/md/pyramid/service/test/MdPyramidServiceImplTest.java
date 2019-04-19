@@ -3,13 +3,18 @@ package com.md.pyramid.service.test;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.md.pyramid.exception.MdPyramidException;
 import com.md.pyramid.service.MdPyramidService;
 import com.md.pyramid.service.MdPyramidServiceImpl;
 
-public class MdPyramidServiceImplTest extends AbstractTest {
+public class MdPyramidServiceImplTest {
+
+    @Rule
+    public ExpectedException        thrown = ExpectedException.none();
 
     private static MdPyramidService mdPyramidService;
 
@@ -66,14 +71,32 @@ public class MdPyramidServiceImplTest extends AbstractTest {
     }
 
     @Test
-    public void calculateMaxSum_givenTestFileDosentExist_returnException() {
+    public void calculateMaxSum_givenNegativeInputTestFile_returnMaxSum0() {
         // Given
 
         String inputFilePath = "/testFiles/TestCase_03.txt";
+        // TestCase_01.txt contains
+        // 1
+        // -8 9
+        // 1 5 9
+        // 4 5 2 3
+
+        // When
+        int maxNumberPath = mdPyramidService.calculateMaxSum(inputFilePath);
+
+        // Then
+        assertEquals(0, maxNumberPath);
+    }
+
+    @Test
+    public void calculateMaxSum_givenTestFileDosentExist_returnException() {
+        // Given
+
+        String inputFilePath = "/testFiles/TestCase_04.txt";
 
         // When
         thrown.expect(MdPyramidException.class);
-        thrown.expectMessage("File does not exist for input file name :/testFiles/TestCase_03.txt");
+        thrown.expectMessage("File does not exist for input file name :/testFiles/TestCase_04.txt");
         mdPyramidService.calculateMaxSum(inputFilePath);
     }
 

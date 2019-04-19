@@ -46,10 +46,23 @@ public class MdPyramidServiceImpl implements MdPyramidService {
         for (int column = ZERO; column <= row; column++) {
             int leftChild = (leftTriangleArray[row + ONE][column] % TWO == evenFlag ? leftTriangleArray[row + ONE][column] : ZERO);
             int rightChild = (leftTriangleArray[row + ONE][column + ONE] % TWO == evenFlag ? leftTriangleArray[row + ONE][column + ONE] : ZERO);
-            result[row][column] = (leftChild > rightChild ? leftChild : rightChild) + (leftChild > rightChild ? result[row + ONE][column] : result[row + ONE][column + ONE]);
+            int validNodeNumber = getValidNodeNumber(leftChild, rightChild, evenFlag);
+            result[row][column] = validNodeNumber + (leftChild == validNodeNumber ? result[row + ONE][column] : result[row + ONE][column + ONE]);
         }
         evenFlag = (evenFlag == ONE ? ZERO : ONE);
         return evenFlag;
+    }
+
+    private int getValidNodeNumber(final int leftChild, final int rightChild, final int evenFlag) {
+        if (leftChild % TWO == evenFlag && rightChild % TWO == evenFlag && leftChild != ZERO && rightChild != ZERO) {
+            return leftChild > rightChild ? leftChild : rightChild;
+        } else if (leftChild % TWO == evenFlag && leftChild != ZERO) {
+            return leftChild;
+        } else if (rightChild % TWO == evenFlag && rightChild != ZERO) {
+            return rightChild;
+        } else {
+            return 0;
+        }
     }
 
     private int[][] prepareArrayFromInputFile(final String inputFilePath) {
