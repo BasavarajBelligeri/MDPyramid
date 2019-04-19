@@ -10,6 +10,11 @@ import java.util.stream.Stream;
 
 import com.md.pyramid.exception.MdPyramidException;
 
+/**
+ * 
+ * @author Basavaraj.m
+ *
+ */
 public final class FileUtil {
 
     private FileUtil() {

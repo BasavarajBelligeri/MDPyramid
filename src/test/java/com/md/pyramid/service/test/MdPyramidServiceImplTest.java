@@ -3,18 +3,19 @@ package com.md.pyramid.service.test;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import com.md.pyramid.exception.MdPyramidException;
 import com.md.pyramid.service.MdPyramidService;
 import com.md.pyramid.service.MdPyramidServiceImpl;
 
-public class MdPyramidServiceImplTest {
-
-    @Rule
-    public ExpectedException        thrown = ExpectedException.none();
+/**
+ * 
+ * 
+ * @author Basavaraj.m
+ *
+ */
+public class MdPyramidServiceImplTest extends AbstractTest {
 
     private static MdPyramidService mdPyramidService;
 
