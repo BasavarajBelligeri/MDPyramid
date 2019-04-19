@@ -5,13 +5,11 @@ import com.md.pyramid.utils.FileUtil;
 
 public class MdPyramidServiceImpl implements MdPyramidService {
 
-    private static final int ZERO     = 0;
+    private static final int ZERO = 0;
 
-    private static final int ONE      = 1;
+    private static final int ONE  = 1;
 
-    private static final int TWO      = 2;
-
-    private final FileUtil   fileUtil = new FileUtil();
+    private static final int TWO  = 2;
 
     /**
      * {@inheritDoc}
@@ -21,7 +19,7 @@ public class MdPyramidServiceImpl implements MdPyramidService {
         if (null == inputFilePath || inputFilePath.isEmpty()) {
             throw new MdPyramidException("File path should not be null or empty");
         }
-        return getMaxSumFromArray(fileUtil.prepareArrayFromInputFile(inputFilePath));
+        return getMaxSumFromArray(FileUtil.prepareArrayFromInputFile(inputFilePath));
     }
 
     /**

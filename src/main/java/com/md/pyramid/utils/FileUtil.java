@@ -10,13 +10,16 @@ import java.util.stream.Stream;
 
 import com.md.pyramid.exception.MdPyramidException;
 
-public class FileUtil {
+public final class FileUtil {
+
+    private FileUtil() {
+    }
 
     private static final String SPACE_REGX = "\\s+";
 
-    public int[][] prepareArrayFromInputFile(final String inputFilePath) {
+    public static int[][] prepareArrayFromInputFile(final String inputFilePath) {
         try {
-            URL url = getClass().getResource(inputFilePath);
+            URL url = FileUtil.class.getResource(inputFilePath);
             if (null == url) {
                 throw new MdPyramidException("File does not exist for input file name :" + inputFilePath);
             }
@@ -27,15 +30,15 @@ public class FileUtil {
         }
     }
 
-    private int[][] getNumberArray(final File file) throws IOException {
+    private static int[][] getNumberArray(final File file) throws IOException {
         try (Stream<String> lines = Files.lines(Paths.get(file.getPath()));) {
-            return lines.map(this::getArrayFromLine)
+            return lines.map(FileUtil::getArrayFromLine)
                     .toArray(int[][]::new);
         }
 
     }
 
-    private int[] getArrayFromLine(final String line) {
+    private static int[] getArrayFromLine(final String line) {
         return Arrays.stream(line.trim().split(SPACE_REGX))
                 .mapToInt(Integer::parseInt)
                 .toArray();
