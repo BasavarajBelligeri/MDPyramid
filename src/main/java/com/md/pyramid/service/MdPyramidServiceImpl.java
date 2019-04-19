@@ -1,24 +1,17 @@
 package com.md.pyramid.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 import com.md.pyramid.exception.MdPyramidException;
+import com.md.pyramid.utils.FileUtil;
 
 public class MdPyramidServiceImpl implements MdPyramidService {
 
-    private static final String SPACE_REGX = "\\s+";
+    private static final int ZERO     = 0;
 
-    private static final int    ZERO       = 0;
+    private static final int ONE      = 1;
 
-    private static final int    ONE        = 1;
+    private static final int TWO      = 2;
 
-    private static final int    TWO        = 2;
+    private final FileUtil   fileUtil = new FileUtil();
 
     /**
      * {@inheritDoc}
@@ -28,68 +21,66 @@ public class MdPyramidServiceImpl implements MdPyramidService {
         if (null == inputFilePath || inputFilePath.isEmpty()) {
             throw new MdPyramidException("File path should not be null or empty");
         }
-        return getMaxSumFromArray(prepareArrayFromInputFile(inputFilePath));
+        return getMaxSumFromArray(fileUtil.prepareArrayFromInputFile(inputFilePath));
     }
 
+    /**
+     * This method will calculate the max sum for given array
+     * 
+     * @param leftTriangleArray
+     * @return max sum
+     */
     private int getMaxSumFromArray(final int[][] leftTriangleArray) {
         int size = leftTriangleArray.length - ONE;
         int[][] result = new int[size + ONE][size + ONE];
-        int evenFlag = leftTriangleArray[ZERO][ZERO] % TWO;
-        evenFlag = (((size + ONE) % TWO) == evenFlag ? evenFlag : ZERO);
+        boolean isEvenNumber = isEvenNumber(leftTriangleArray[ZERO][ZERO]);
+        isEvenNumber = isEvenNumber(size + ONE) ? Boolean.TRUE : isEvenNumber;
         for (int row = size - ONE; row >= ZERO; row--) {
-            evenFlag = updateColumnWiseSum(leftTriangleArray, result, evenFlag, row);
+            isEvenNumber = updateColumnWiseSum(leftTriangleArray, result, isEvenNumber, row);
         }
         return result[ZERO][ZERO] + leftTriangleArray[ZERO][ZERO];
     }
 
-    private int updateColumnWiseSum(final int[][] leftTriangleArray, final int[][] result, int evenFlag, final int row) {
-        for (int column = ZERO; column <= row; column++) {
-            int leftChild = (leftTriangleArray[row + ONE][column] % TWO == evenFlag ? leftTriangleArray[row + ONE][column] : ZERO);
-            int rightChild = (leftTriangleArray[row + ONE][column + ONE] % TWO == evenFlag ? leftTriangleArray[row + ONE][column + ONE] : ZERO);
-            int validNodeNumber = getValidNodeNumber(leftChild, rightChild, evenFlag);
-            result[row][column] = validNodeNumber + (leftChild == validNodeNumber ? result[row + ONE][column] : result[row + ONE][column + ONE]);
-        }
-        evenFlag = (evenFlag == ONE ? ZERO : ONE);
-        return evenFlag;
+    private boolean isEvenNumber(final int number) {
+        return number % TWO == ZERO;
     }
 
-    private int getValidNodeNumber(final int leftChild, final int rightChild, final int evenFlag) {
-        if (leftChild % TWO == evenFlag && rightChild % TWO == evenFlag && leftChild != ZERO && rightChild != ZERO) {
+    /**
+     * This method will calculate the max sum from the each row with its left child and right child and update to the result array by considering the even or odd
+     * 
+     * @param leftTriangleArray
+     * @param result
+     * @param isEvenNumber
+     * @param row
+     * @return boolean flag to that indicates to consideration even or odd number in next column
+     */
+    private boolean updateColumnWiseSum(final int[][] leftTriangleArray, final int[][] result, final boolean isEvenNumber, final int row) {
+        for (int column = ZERO; column <= row; column++) {
+            int leftChild = (isEvenNumber(leftTriangleArray[row + ONE][column]) == isEvenNumber ? leftTriangleArray[row + ONE][column] : ZERO);
+            int rightChild = (isEvenNumber(leftTriangleArray[row + ONE][column + ONE]) == isEvenNumber ? leftTriangleArray[row + ONE][column + ONE] : ZERO);
+            int validNodeNumber = getValidNodeNumber(leftChild, rightChild, isEvenNumber);
+            result[row][column] = validNodeNumber + (leftChild == validNodeNumber ? result[row + ONE][column] : result[row + ONE][column + ONE]);
+        }
+        return isEvenNumber ? Boolean.FALSE : Boolean.TRUE;
+    }
+
+    /**
+     * This method is used to get the max number from the given left child and right child numbers
+     * 
+     * @param leftChild
+     * @param rightChild
+     * @param isEvenNumber
+     * @return max number
+     */
+    private int getValidNodeNumber(final int leftChild, final int rightChild, final boolean isEvenNumber) {
+        if (isEvenNumber(leftChild) == isEvenNumber && isEvenNumber(rightChild) == isEvenNumber && leftChild != ZERO && rightChild != ZERO) {
             return leftChild > rightChild ? leftChild : rightChild;
-        } else if (leftChild % TWO == evenFlag && leftChild != ZERO) {
+        } else if (isEvenNumber(leftChild) == isEvenNumber && leftChild != ZERO) {
             return leftChild;
-        } else if (rightChild % TWO == evenFlag && rightChild != ZERO) {
+        } else if (isEvenNumber(rightChild) == isEvenNumber && rightChild != ZERO) {
             return rightChild;
         } else {
             return 0;
         }
     }
-
-    private int[][] prepareArrayFromInputFile(final String inputFilePath) {
-        try {
-            URL url = getClass().getResource(inputFilePath);
-            if (null == url) {
-                throw new MdPyramidException("File does not exist for input file name :" + inputFilePath);
-            }
-            File file = new File(url.getPath());
-            return getNumberArray(file);
-        } catch (IOException exception) {
-            throw new MdPyramidException("Exception occrued while reading file " + inputFilePath, exception);
-        }
-    }
-
-    private int[][] getNumberArray(final File file) throws IOException {
-        try (Stream<String> lines = Files.lines(Paths.get(file.getPath()));) {
-            return lines.map(this::getArrayFromLine)
-                    .toArray(int[][]::new);
-        }
-
-    }
-
-    private int[] getArrayFromLine(final String line) {
-        return Arrays.stream(line.trim().split(SPACE_REGX))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-    }
-
 }
