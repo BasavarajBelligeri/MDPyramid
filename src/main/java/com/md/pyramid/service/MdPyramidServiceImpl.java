@@ -85,10 +85,8 @@ public class MdPyramidServiceImpl implements MdPyramidService {
             return leftChild > rightChild ? leftChild : rightChild;
         } else if (leftChild != ZERO) {
             return leftChild;
-        } else if (rightChild != ZERO) {
-            return rightChild;
         } else {
-            return 0;
+            return rightChild;
         }
     }
 }
