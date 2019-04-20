@@ -78,7 +78,6 @@ public class MdPyramidServiceImpl implements MdPyramidService {
      * 
      * @param leftChild
      * @param rightChild
-     * @param isEvenNumber
      * @return max number
      */
     private int getValidNodeNumber(final int leftChild, final int rightChild) {
