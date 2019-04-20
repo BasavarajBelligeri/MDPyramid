@@ -66,7 +66,7 @@ public class MdPyramidServiceImpl implements MdPyramidService {
             // finding the right child number from the current
             int rightChild = (isEvenNumber(leftTriangleArray[row + ONE][column + ONE]) == isEvenNumber ? leftTriangleArray[row + ONE][column + ONE] : ZERO);
             // if both numbers are even or odd then taking the max number
-            int validNodeNumber = getValidNodeNumber(leftChild, rightChild, isEvenNumber);
+            int validNodeNumber = getValidNodeNumber(leftChild, rightChild);
             // updating the max number in result array
             result[row][column] = validNodeNumber + (leftChild == validNodeNumber ? result[row + ONE][column] : result[row + ONE][column + ONE]);
         }
@@ -81,12 +81,12 @@ public class MdPyramidServiceImpl implements MdPyramidService {
      * @param isEvenNumber
      * @return max number
      */
-    private int getValidNodeNumber(final int leftChild, final int rightChild, final boolean isEvenNumber) {
-        if (isEvenNumber(leftChild) == isEvenNumber && isEvenNumber(rightChild) == isEvenNumber && leftChild != ZERO && rightChild != ZERO) {
+    private int getValidNodeNumber(final int leftChild, final int rightChild) {
+        if (leftChild != ZERO && rightChild != ZERO) {
             return leftChild > rightChild ? leftChild : rightChild;
-        } else if (isEvenNumber(leftChild) == isEvenNumber && leftChild != ZERO) {
+        } else if (leftChild != ZERO) {
             return leftChild;
-        } else if (isEvenNumber(rightChild) == isEvenNumber && rightChild != ZERO) {
+        } else if (rightChild != ZERO) {
             return rightChild;
         } else {
             return 0;
